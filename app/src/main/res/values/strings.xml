@@ -13,7 +13,7 @@
     <!-- Error messages-->
     <string name="detail_error_message">Sandwich data not available</string>
 
-    <string-array name="sandwich_names">
+    <string-array name="sandwich_names" formatted="false">
         <item>Ham and cheese sandwich</item>
         <item>Bosna</item>
         <item>Chivito</item>
@@ -26,7 +26,7 @@
         <item>Vada Pav</item>
     </string-array>
 
-    <string-array name="sandwich_details">
+    <string-array name="sandwich_details" formatted="false">
         <item>{\"name\":{\"mainName\":\"Ham and cheese
             sandwich\",\"alsoKnownAs\":[]},\"placeOfOrigin\":\"\",\"description\":\"A ham and cheese
             sandwich is a common type of sandwich. It is made by putting cheese and sliced ham
