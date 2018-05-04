@@ -17,15 +17,28 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    @BindView(R.id.also_known_label_tv) TextView alsoKnownLabelTv;
+    @BindView(R.id.also_known_tv) TextView alsoKnownAsTv;
+    @BindView(R.id.origin_label_tv) TextView originLabelTv;
+    @BindView(R.id.origin_tv) TextView originTv;
+    @BindView(R.id.description_label_tv) TextView descriptionLabelTv;
+    @BindView(R.id.description_tv) TextView descriptionTv;
+    @BindView(R.id.ingredients_label_tv) TextView ingredientsLabelTv;
+    @BindView(R.id.ingredients_tv) TextView ingredientsTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -52,17 +65,11 @@ public class DetailActivity extends AppCompatActivity {
         populateUI(sandwich);
 
         final ImageView ingredientsIv = findViewById(R.id.image_iv);
-        RequestCreator requestCreator = Picasso.with(this).load(sandwich.getImage());
-        requestCreator.into(ingredientsIv, new Callback() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onError() {
-                ingredientsIv.setVisibility(View.GONE);
-            }
-        });
+        Picasso.with(this)
+                .load(sandwich.getImage())
+                .placeholder(R.drawable.progress_animation)
+                .error(R.drawable.image_not_found)
+                .into(ingredientsIv);
     }
 
     private void closeOnError() {
@@ -71,10 +78,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(Sandwich sandwich) {
-        populateOrGone(R.id.also_known_label_tv, R.id.also_known_tv, sandwich.getAlsoKnownAs());
-        populateOrGone(R.id.origin_label_tv, R.id.origin_tv, sandwich.getPlaceOfOrigin());
-        populateOrGone(R.id.description_label_tv, R.id.description_tv, sandwich.getDescription());
-        populateOrGone(R.id.ingredients_label_tv, R.id.ingredients_tv, sandwich.getIngredients(), "- ", ";\r\n");
+        populateOrGone(alsoKnownLabelTv, alsoKnownAsTv, sandwich.getAlsoKnownAs());
+        populateOrGone(originLabelTv, originTv, sandwich.getPlaceOfOrigin());
+        populateOrGone(descriptionLabelTv, descriptionTv, sandwich.getDescription());
+        populateOrGone(ingredientsLabelTv, ingredientsTv, sandwich.getIngredients(), "- ", ";\r\n");
     }
 
 
@@ -85,11 +92,11 @@ public class DetailActivity extends AppCompatActivity {
      * hide label and value elements if value is empty
      */
 
-    private void populateOrGone(int idLabel, int idValue, List<String> valueList){
-        populateOrGone(idLabel, idValue, valueList, "", ", ");
+    private void populateOrGone(TextView labelTv, TextView valueTv, List<String> valueList){
+        populateOrGone(labelTv, valueTv, valueList, "", ", ");
     }
 
-    private void populateOrGone(int idLabel, int idValue, List<String> valueList, String bullet, String separator){
+    private void populateOrGone(TextView labelTv, TextView valueTv, List<String> valueList, String bullet, String separator){
         String valueString = "";
         if(valueList.size() > 0) {
             for (int i = 0; i < valueList.size(); i++) {
@@ -97,17 +104,16 @@ public class DetailActivity extends AppCompatActivity {
                 valueString += (i != valueList.size() - 1) ? separator : "";
             }
         }
-        populateOrGone(idLabel, idValue, valueString);
+        populateOrGone(labelTv, valueTv, valueString);
     }
 
-    private void populateOrGone(int idLabel, int idValue, String value){
-        TextView field = findViewById(idValue);
+    private void populateOrGone(TextView labelTv, TextView valueTv, String value){
         if(!value.equals("")){
-            field.setText(value);
+            valueTv.setText(value);
         }
         else{
-            findViewById(idLabel).setVisibility(View.GONE);
-            field.setVisibility(View.GONE);
+            labelTv.setVisibility(View.GONE);
+            valueTv.setVisibility(View.GONE);
         }
     }
 }

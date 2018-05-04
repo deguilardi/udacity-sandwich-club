@@ -29,11 +29,11 @@ public class JsonUtils {
             JSONObject sandwichJson = new JSONObject(sandwichString);
             JSONObject sandwichName = sandwichJson.getJSONObject(J_NAME);
 
-            sandwich.setMainName(sandwichName.getString(J_NAME_MAIN_NAME));
+            sandwich.setMainName(sandwichName.optString(J_NAME_MAIN_NAME));
             sandwich.setAlsoKnownAs(getStringList(J_NAME_ALSO_KNOWN_AS, sandwichName));
-            sandwich.setPlaceOfOrigin(sandwichJson.getString(J_PLACE_ORIGIN));
-            sandwich.setDescription(sandwichJson.getString(J_DESCRIPTION));
-            sandwich.setImage(sandwichJson.getString(J_IMAGE));
+            sandwich.setPlaceOfOrigin(sandwichJson.optString(J_PLACE_ORIGIN));
+            sandwich.setDescription(sandwichJson.optString(J_DESCRIPTION));
+            sandwich.setImage(sandwichJson.optString(J_IMAGE));
             sandwich.setIngredients(getStringList(J_INGREDIENTS, sandwichJson));
             return sandwich;
         }
@@ -51,7 +51,7 @@ public class JsonUtils {
         JSONArray jsonArray = from.getJSONArray(field);
         List<String> output = new ArrayList<>();
         for (int i=0; i<jsonArray.length(); i++) {
-            output.add( jsonArray.getString(i) );
+            output.add( jsonArray.optString(i) );
         }
         return output;
     }
